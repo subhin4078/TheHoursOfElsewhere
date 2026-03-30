@@ -1,0 +1,86 @@
+[
+  {
+    "id": "lake-bled-slv",
+    "name": "Lake Bled",
+    "country": "Slovenia",
+    "coordinates": { "lat": 46.3639, "lng": 14.0938 },
+    "timezone": "Europe/Ljubljana",
+    "narrative": "A solitary church on an island of glacial blue. The silence here is a living thing.",
+    "quartiles": {
+      "0000-0600": { "label": "The Deep Blue", "image": "/assets/traces/bled_night.jpg" },
+      "0600-1200": { "label": "The Morning Mist", "image": "/assets/traces/bled_dawn.jpg" },
+      "1200-1800": { "label": "Alpine Noon", "image": "/assets/traces/bled_day.jpg" },
+      "1800-0000": { "label": "The Cooling Earth", "image": "/assets/traces/bled_dusk.jpg" }
+    }
+  },
+  {
+    "id": "shibuya-jpn",
+    "name": "Shibuya",
+    "country": "Japan",
+    "coordinates": { "lat": 35.6595, "lng": 139.7005 },
+    "timezone": "Asia/Tokyo",
+    "narrative": "The electric heartbeat of the archipelago. A thousand directions, all taken at once.",
+    "quartiles": {
+      "0000-0600": { "label": "Neon Afterglow", "image": "/assets/traces/tokyo_late.jpg" },
+      "0600-1200": { "label": "The Great Awakening", "image": "/assets/traces/tokyo_morning.jpg" },
+      "1200-1800": { "label": "Vertical Shadows", "image": "/assets/traces/tokyo_noon.jpg" },
+      "1800-0000": { "label": "Cyberpunk Sunset", "image": "/assets/traces/tokyo_night.jpg" }
+    }
+  },
+  {
+    "id": "reykjavik-isl",
+    "name": "Reykjavík",
+    "country": "Iceland",
+    "coordinates": { "lat": 64.1265, "lng": -21.8174 },
+    "timezone": "Atlantic/Reykjavik",
+    "narrative": "Where basalt meets the spray of the North Atlantic. The wind here carries ancient rumors.",
+    "quartiles": {
+      "0000-0600": { "label": "Arctic Stillness", "image": "/assets/traces/rey_night.jpg" },
+      "0600-1200": { "label": "The Pale Sun", "image": "/assets/traces/rey_dawn.jpg" },
+      "1200-1800": { "label": "Glacial Light", "image": "/assets/traces/rey_day.jpg" },
+      "1800-0000": { "label": "Twilight Echoes", "image": "/assets/traces/rey_dusk.jpg" }
+    }
+  },
+  {
+    "id": "marrakech-mar",
+    "name": "Marrakech",
+    "country": "Morocco",
+    "coordinates": { "lat": 31.6295, "lng": -7.9811 },
+    "timezone": "Africa/Casablanca",
+    "narrative": "An ochre labyrinth smelling of saffron and heat. Time moves differently within the red walls.",
+    "quartiles": {
+      "0000-0600": { "label": "Desert Chill", "image": "/assets/traces/mar_night.jpg" },
+      "0600-1200": { "label": "The Pink City", "image": "/assets/traces/mar_morning.jpg" },
+      "1200-1800": { "label": "Burning Noon", "image": "/assets/traces/mar_day.jpg" },
+      "1800-0000": { "label": "Dusk over Medina", "image": "/assets/traces/mar_dusk.jpg" }
+    }
+  },
+  {
+    "id": "vancouver-can",
+    "name": "Stanley Park",
+    "country": "Canada",
+    "coordinates": { "lat": 49.3017, "lng": -123.1431 },
+    "timezone": "America/Vancouver",
+    "narrative": "Where the cedar forests meet the Pacific tides. The emerald edge of the continent.",
+    "quartiles": {
+      "0000-0600": { "label": "Pacific Fog", "image": "/assets/traces/van_night.jpg" },
+      "0600-1200": { "label": "The First Light", "image": "/assets/traces/van_dawn.jpg" },
+      "1200-1800": { "label": "Raincoast Noon", "image": "/assets/traces/van_day.jpg" },
+      "1800-0000": { "label": "The Golden Pier", "image": "/assets/traces/van_dusk.jpg" }
+    }
+  },
+  {
+    "id": "venice-ita",
+    "name": "Venice",
+    "country": "Italy",
+    "coordinates": { "lat": 45.4408, "lng": 12.3155 },
+    "timezone": "Europe/Rome",
+    "narrative": "A city floating on a dream of the past. The water reflects centuries of fading gold.",
+    "quartiles": {
+      "0000-0600": { "label": "Canal Silence", "image": "/assets/traces/ven_night.jpg" },
+      "0600-1200": { "label": "The Rising Tide", "image": "/assets/traces/ven_dawn.jpg" },
+      "1200-1800": { "label": "Gondola Shadows", "image": "/assets/traces/ven_day.jpg" },
+      "1800-0000": { "label": "Adria Blue", "image": "/assets/traces/ven_dusk.jpg" }
+    }
+  }
+]
