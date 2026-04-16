@@ -67,15 +67,15 @@ export default function SceneSetup({ focusTarget, resetSignal }) {
         color="#22d3ee"
         distance={200}
       />
-      <fog attach="fog" args={["#000000", 350, 600]} />
+      <fog attach="fog" args={["#000000", 500, 900]} />
       <Stars
-        radius={400}
-        depth={120}
-        count={4000}
-        factor={2.8}
-        saturation={0.1}
+        radius={350}
+        depth={80}
+        count={6000}
+        factor={12}
+        saturation={0.3}
         fade
-        speed={0.2}
+        speed={0.3}
       />
       <OrbitControls
         ref={controlsRef}
