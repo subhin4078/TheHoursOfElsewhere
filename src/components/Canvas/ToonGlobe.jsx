@@ -124,11 +124,11 @@ export default function ToonGlobe({
     g.atmosphereColor("#60d0ff");
     g.atmosphereAltitude(0.18);
 
-    // 3-tone cel-shading gradient map
-    const tones = new Uint8Array([64, 148, 220]);
+    // Soft 4-tone cel-shading gradient map (brighter base)
+    const tones = new Uint8Array([100, 160, 210, 245]);
     const gradientMap = new THREE.DataTexture(
       tones,
-      3,
+      4,
       1,
       THREE.LuminanceFormat,
     );
@@ -136,17 +136,55 @@ export default function ToonGlobe({
     gradientMap.magFilter = THREE.NearestFilter;
     gradientMap.needsUpdate = true;
 
-    // Load earth day texture, then apply MeshToonMaterial
-    new THREE.TextureLoader().load(
-      "https://unpkg.com/three-globe/example/img/earth-day.jpg",
-      (texture) => {
-        const toonMat = new THREE.MeshToonMaterial({
-          map: texture,
-          gradientMap,
-        });
-        g.globeMaterial(toonMat);
-      },
-    );
+    // Load texture, posterize it on a canvas for a cartoon look, then apply
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const px = imageData.data;
+      const levels = 10; // more levels = softer posterization
+      const step = 256 / levels;
+
+      for (let i = 0; i < px.length; i += 4) {
+        // Posterize each channel
+        let r = Math.round(px[i] / step) * step;
+        let g2 = Math.round(px[i + 1] / step) * step;
+        let b = Math.round(px[i + 2] / step) * step;
+
+        // Lighten: lift shadows
+        r = Math.min(255, r + 30);
+        g2 = Math.min(255, g2 + 30);
+        b = Math.min(255, b + 30);
+
+        // Gentle saturation boost
+        const gray = 0.299 * r + 0.587 * g2 + 0.114 * b;
+        r = Math.min(255, Math.max(0, gray + (r - gray) * 1.25));
+        g2 = Math.min(255, Math.max(0, gray + (g2 - gray) * 1.25));
+        b = Math.min(255, Math.max(0, gray + (b - gray) * 1.25));
+
+        px[i] = r;
+        px[i + 1] = g2;
+        px[i + 2] = b;
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+
+      const cartoonTex = new THREE.CanvasTexture(canvas);
+      cartoonTex.colorSpace = THREE.SRGBColorSpace;
+
+      const toonMat = new THREE.MeshToonMaterial({
+        map: cartoonTex,
+        gradientMap,
+      });
+      g.globeMaterial(toonMat);
+    };
+    img.src = "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
 
     return g;
   }, []);
@@ -189,13 +227,18 @@ export default function ToonGlobe({
       >
         <primitive object={globe} />
       </group>
+      {/* Cartoon ink outline */}
+      <mesh>
+        <sphereGeometry args={[GLOBE_RADIUS + 0.6, 64, 64]} />
+        <meshBasicMaterial color="#0c4a6e" side={THREE.BackSide} />
+      </mesh>
       {/* Subtle inner edge highlight */}
       <mesh>
         <sphereGeometry args={[GLOBE_RADIUS - 0.2, 48, 48]} />
         <meshBasicMaterial
           color="#0ea5e9"
           transparent
-          opacity={0.02}
+          opacity={0.04}
           side={THREE.BackSide}
         />
       </mesh>

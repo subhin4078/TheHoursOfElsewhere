@@ -50,7 +50,7 @@ export default function SceneSetup({ focusTarget, resetSignal }) {
 
   return (
     <>
-      <ambientLight intensity={1.2} color="#ffffff" />
+      <ambientLight intensity={1.8} color="#ffffff" />
       <directionalLight
         intensity={2.2}
         position={[200, 180, 150]}
