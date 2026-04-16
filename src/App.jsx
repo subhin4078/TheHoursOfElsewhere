@@ -13,7 +13,14 @@ function App() {
   const { locations, selectedNodes, activeNodeId, toggleLens, clearSelection } =
     useStore();
   const [focusTarget, setFocusTarget] = useState(new THREE.Vector3(0, 0, 0));
+  const [resetSignal, setResetSignal] = useState(0);
   const isCompareMode = selectedNodes.length > 1;
+
+  const handleReset = () => {
+    clearSelection();
+    setFocusTarget(new THREE.Vector3(0, 0, 0));
+    setResetSignal((s) => s + 1);
+  };
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -42,7 +49,7 @@ function App() {
     <div className="relative h-full w-full bg-black">
       {/* 3D Canvas */}
       <Canvas
-        camera={{ position: [0, 0, 260], fov: 48 }}
+        camera={{ position: [0, 0, 300], fov: 48 }}
         dpr={[1, 2]}
         gl={{
           antialias: true,
@@ -51,11 +58,12 @@ function App() {
         }}
       >
         <color attach="background" args={["#030712"]} />
-        <SceneSetup focusTarget={focusTarget} />
+        <SceneSetup focusTarget={focusTarget} resetSignal={resetSignal} />
         <ToonGlobe
           locations={locations}
           selectedNodes={selectedNodes}
           onSelect={handleSelect}
+          resetSignal={resetSignal}
         />
       </Canvas>
 
@@ -94,8 +102,30 @@ function App() {
             </div>
           </div>
 
+          {/* Reset button */}
+          <div className="pointer-events-auto flex items-center gap-2">
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-1.5 rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] px-3 py-2 text-[11px] uppercase tracking-[0.2em] text-cyan-300/80 transition hover:border-cyan-400/50 hover:bg-cyan-400/15 hover:text-cyan-200"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-3.5 w-3.5"
+              >
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+              Reset
+            </button>
+          </div>
+
           {/* Sidebar */}
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto flex items-center gap-2">
             <Sidebar
               locations={locations}
               selectedNodes={selectedNodes}

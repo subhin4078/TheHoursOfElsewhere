@@ -1,13 +1,40 @@
 import { OrbitControls, Stars } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-export default function SceneSetup({ focusTarget }) {
+export default function SceneSetup({ focusTarget, resetSignal }) {
   const { camera } = useThree();
+  const controlsRef = useRef();
+
+  useEffect(() => {
+    if (!resetSignal) return;
+    gsap.to(camera.position, {
+      x: 0,
+      y: 0,
+      z: 300,
+      duration: 1.2,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        camera.up.set(0, 1, 0);
+        camera.lookAt(0, 0, 0);
+      },
+      onComplete: () => {
+        camera.up.set(0, 1, 0);
+        camera.position.set(0, 0, 300);
+        camera.lookAt(0, 0, 0);
+        if (controlsRef.current) {
+          controlsRef.current.target.set(0, 0, 0);
+          controlsRef.current.update();
+        }
+      },
+    });
+  }, [camera, resetSignal]);
 
   useEffect(() => {
     if (!focusTarget) return;
+    // ignore zero-vector focusTarget (used for reset) to avoid moving camera to origin
+    if (focusTarget.length && focusTarget.length() === 0) return;
 
     const destination = focusTarget.clone().normalize().multiplyScalar(170);
 
@@ -23,16 +50,16 @@ export default function SceneSetup({ focusTarget }) {
 
   return (
     <>
-      <ambientLight intensity={0.25} color="#b8e0ff" />
+      <ambientLight intensity={1.2} color="#ffffff" />
       <directionalLight
-        intensity={0.9}
+        intensity={2.2}
         position={[200, 180, 150]}
-        color="#f0f8ff"
+        color="#ffffff"
       />
       <directionalLight
-        intensity={0.25}
+        intensity={0.8}
         position={[-150, -80, -100]}
-        color="#0ea5e9"
+        color="#cce8ff"
       />
       <pointLight
         position={[0, 0, 0]}
@@ -51,6 +78,7 @@ export default function SceneSetup({ focusTarget }) {
         speed={0.2}
       />
       <OrbitControls
+        ref={controlsRef}
         enablePan={false}
         minDistance={120}
         maxDistance={300}

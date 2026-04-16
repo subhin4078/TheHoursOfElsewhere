@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import ThreeGlobe from "three-globe";
 import { latLngToVector3 } from "../../utils/math";
@@ -52,7 +52,9 @@ function Marker({ location, isActive, onSelect }) {
       <mesh
         onClick={(event) => {
           event.stopPropagation();
-          onSelect(location.id, markerPosition);
+          const worldPos = new THREE.Vector3();
+          event.object.getWorldPosition(worldPos);
+          onSelect(location.id, worldPos);
         }}
       >
         <sphereGeometry args={[isActive ? 1.8 : 1.4, 20, 20]} />
@@ -107,33 +109,78 @@ function Marker({ location, isActive, onSelect }) {
 }
 
 /* ── Main Globe ───────────────────────────────────── */
-export default function ToonGlobe({ locations, selectedNodes, onSelect }) {
+export default function ToonGlobe({
+  locations,
+  selectedNodes,
+  onSelect,
+  resetSignal,
+}) {
   const groupRef = useRef();
 
   const globe = useMemo(() => {
     const g = new ThreeGlobe();
-    g.showGraticules(true);
+    g.showGraticules(false);
     g.showAtmosphere(true);
-    g.atmosphereColor("#0ea5e9");
+    g.atmosphereColor("#60d0ff");
     g.atmosphereAltitude(0.18);
 
-    const material = g.globeMaterial();
-    if (material) {
-      if (material.color) material.color = new THREE.Color("#0c1929");
-      if (material.emissive) {
-        material.emissive = new THREE.Color("#082f49");
-        material.emissiveIntensity = 0.45;
-      }
-      material.shininess = 8;
-    }
+    // 3-tone cel-shading gradient map
+    const tones = new Uint8Array([64, 148, 220]);
+    const gradientMap = new THREE.DataTexture(
+      tones,
+      3,
+      1,
+      THREE.LuminanceFormat,
+    );
+    gradientMap.minFilter = THREE.NearestFilter;
+    gradientMap.magFilter = THREE.NearestFilter;
+    gradientMap.needsUpdate = true;
+
+    // Load earth day texture, then apply MeshToonMaterial
+    new THREE.TextureLoader().load(
+      "https://unpkg.com/three-globe/example/img/earth-day.jpg",
+      (texture) => {
+        const toonMat = new THREE.MeshToonMaterial({
+          map: texture,
+          gradientMap,
+        });
+        g.globeMaterial(toonMat);
+      },
+    );
 
     return g;
   }, []);
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y += delta * 0.04;
+    if (selectedNodes.length === 0) {
+      groupRef.current.rotation.y += delta * 0.04;
+    }
   });
+
+  // Ensure globe starts showing the equator and center on Asia/Pacific
+  useEffect(() => {
+    if (!groupRef.current) return;
+    // target longitude to center (east positive) — ~150°E shows Asia / Pacific
+    const targetLat = 0;
+    const targetLng = 150;
+    const v = latLngToVector3(targetLat, targetLng, 100);
+    // compute rotation.y so that the target vector faces the camera (positive Z)
+    const ry = Math.atan2(-v.x, v.z);
+    groupRef.current.rotation.x = Math.PI / 2;
+    groupRef.current.rotation.y = ry;
+  }, []);
+
+  // Reset rotation to equator-facing Asia/Pacific when reset is triggered
+  useEffect(() => {
+    if (!resetSignal || !groupRef.current) return;
+    const targetLat = 0;
+    const targetLng = 150;
+    const v = latLngToVector3(targetLat, targetLng, 100);
+    const ry = Math.atan2(-v.x, v.z);
+    groupRef.current.rotation.y = ry;
+    groupRef.current.rotation.x = Math.PI / 2;
+  }, [resetSignal]);
 
   return (
     <group ref={groupRef}>
@@ -142,16 +189,6 @@ export default function ToonGlobe({ locations, selectedNodes, onSelect }) {
       >
         <primitive object={globe} />
       </group>
-      {/* Hex wireframe overlay */}
-      <mesh>
-        <sphereGeometry args={[GLOBE_RADIUS + 0.3, 64, 64]} />
-        <meshBasicMaterial
-          color="#22d3ee"
-          wireframe
-          transparent
-          opacity={0.04}
-        />
-      </mesh>
       {/* Subtle inner edge highlight */}
       <mesh>
         <sphereGeometry args={[GLOBE_RADIUS - 0.2, 48, 48]} />
