@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import ToonGlobe from "./components/Canvas/ToonGlobe";
+import Moon from "./components/Canvas/Moon";
 import SceneSetup from "./components/Canvas/SceneSetup";
 import LocationCard from "./components/UI/LocationCard";
 import Sidebar from "./components/UI/Sidebar";
@@ -65,6 +66,7 @@ function App() {
           onSelect={handleSelect}
           resetSignal={resetSignal}
         />
+        <Moon />
       </Canvas>
 
       {/* UI Overlay */}
