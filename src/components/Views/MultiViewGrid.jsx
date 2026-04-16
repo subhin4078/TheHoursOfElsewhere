@@ -5,9 +5,20 @@ import {
   TRACE_PLACEHOLDER_IMAGE,
 } from "../../utils/trace";
 
+function getTimeOfDayInfo(hour) {
+  if (hour >= 5 && hour < 7) return { label: "Dawn", dot: "bg-amber-300" };
+  if (hour >= 7 && hour < 12) return { label: "Morning", dot: "bg-yellow-200" };
+  if (hour >= 12 && hour < 17)
+    return { label: "Afternoon", dot: "bg-orange-300" };
+  if (hour >= 17 && hour < 20) return { label: "Evening", dot: "bg-rose-300" };
+  if (hour >= 20 && hour < 22) return { label: "Dusk", dot: "bg-purple-300" };
+  return { label: "Night", dot: "bg-indigo-300" };
+}
+
 function TraceCell({ location, index }) {
-  const { quartileKey, clock, syncText, dateText } = useTime(location.timezone);
+  const { quartileKey, clock, syncText, now } = useTime(location.timezone);
   const quartile = getTraceForQuartile(location, quartileKey);
+  const tod = getTimeOfDayInfo(now.hour());
 
   return (
     <motion.article
@@ -25,12 +36,18 @@ function TraceCell({ location, index }) {
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/10" />
-      {/* Top-left badge */}
-      <div className="absolute left-3 top-3">
-        <div className="rounded-md bg-black/50 px-2 py-1 backdrop-blur-sm">
+      {/* Top badges */}
+      <div className="absolute left-3 right-3 top-3 flex items-start justify-between">
+        <div className="rounded-md border border-white/10 bg-black/50 px-2 py-1 backdrop-blur-md">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-300/80">
             {location.country}
           </p>
+        </div>
+        <div className="flex items-center gap-1.5 rounded-md border border-white/10 bg-black/50 px-2 py-1 backdrop-blur-md">
+          <span className={`h-1.5 w-1.5 rounded-full ${tod.dot}`} />
+          <span className="text-[9px] uppercase tracking-wider text-white/60">
+            {tod.label}
+          </span>
         </div>
       </div>
       {/* Bottom content */}
@@ -47,7 +64,7 @@ function TraceCell({ location, index }) {
               {clock}
             </p>
             <motion.p
-              className="mt-0.5 flex items-center justify-end gap-1 text-[9px] uppercase tracking-[0.14em] text-cyan-300/80"
+              className="mt-0.5 flex items-center justify-end gap-1 text-[9px] uppercase tracking-[0.14em] text-cyan-300/60"
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{
                 repeat: Infinity,

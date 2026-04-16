@@ -71,18 +71,18 @@ function App() {
       <div className="pointer-events-none absolute inset-0 flex flex-col">
         {/* Header */}
         <motion.header
-          className="pointer-events-none relative z-30 flex items-start justify-between p-4 pb-0"
+          className="pointer-events-none relative z-30 flex items-center justify-between px-5 py-4"
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <div className="flex items-center gap-3">
-            {/* Logo mark */}
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07]">
+          {/* Left — Brand */}
+          <div className="pointer-events-auto flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/[0.07] shadow-[0_0_24px_-6px_rgba(34,211,238,0.15)]">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                className="h-4.5 w-4.5 text-cyan-300"
+                className="h-5 w-5 text-cyan-300"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"
@@ -93,20 +93,22 @@ function App() {
               </svg>
             </div>
             <div>
-              <h1 className="text-base font-semibold tracking-[0.06em] text-white/90">
+              <h1 className="text-[15px] font-semibold tracking-[0.04em] text-white/90">
                 The Hours of Elsewhere
               </h1>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-cyan-400/60">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-cyan-400/50">
                 Global Time Explorer
               </p>
             </div>
           </div>
 
-          {/* Reset button */}
+          {/* Right — Actions */}
           <div className="pointer-events-auto flex items-center gap-2">
             <button
               onClick={handleReset}
-              className="flex items-center gap-1.5 rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] px-3 py-2 text-[11px] uppercase tracking-[0.2em] text-cyan-300/80 transition hover:border-cyan-400/50 hover:bg-cyan-400/15 hover:text-cyan-200"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] text-cyan-300/80 transition-all hover:border-cyan-400/50 hover:bg-cyan-400/15 hover:text-cyan-200"
+              aria-label="Reset view"
+              title="Reset view"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -115,17 +117,12 @@ function App() {
                 strokeWidth="1.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-3.5 w-3.5"
+                className="h-4 w-4"
               >
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
               </svg>
-              Reset
             </button>
-          </div>
-
-          {/* Sidebar */}
-          <div className="pointer-events-auto flex items-center gap-2">
             <Sidebar
               locations={locations}
               selectedNodes={selectedNodes}
@@ -140,7 +137,7 @@ function App() {
 
         {/* Status bar */}
         <motion.div
-          className="pointer-events-none z-20 px-4 pb-1"
+          className="pointer-events-none z-20 px-5 pb-1"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -161,7 +158,7 @@ function App() {
           {isCompareMode ? (
             <motion.section
               key="grid"
-              className="pointer-events-auto z-20 px-4 pb-4"
+              className="pointer-events-auto z-20 px-5 pb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
@@ -205,7 +202,7 @@ function App() {
           ) : (
             <motion.section
               key="single"
-              className="pointer-events-auto z-20 px-4 pb-4"
+              className="pointer-events-auto z-20 px-5 pb-4"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}

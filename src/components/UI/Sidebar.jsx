@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import { useTime } from "../../hooks/useTime";
 
 function LocationRow({ location, checked, onToggle }) {
@@ -73,51 +74,147 @@ export default function Sidebar({
   onToggle,
   onClear,
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="hud-panel flex max-h-[calc(100vh-6rem)] w-[320px] flex-col rounded-2xl">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
-        <div className="flex items-center gap-2.5">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
-            Navigator
-          </h2>
-          <AnimatePresence>
-            {selectedNodes.length > 0 && (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
-                className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-400/20 px-1.5 font-mono text-[10px] font-semibold text-cyan-300"
-              >
-                {selectedNodes.length}/4
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </div>
-        <button
-          type="button"
-          className="rounded-lg border border-white/10 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wider text-white/50 transition-all hover:border-white/20 hover:bg-white/[0.07] hover:text-white/80"
-          onClick={onClear}
+    <>
+      {/* Toggle button — always visible */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] text-cyan-300/80 transition-all hover:border-cyan-400/50 hover:bg-cyan-400/15 hover:text-cyan-200"
+        aria-label="Toggle navigator"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4"
         >
-          Clear
-        </button>
-      </div>
-      {/* Body */}
-      <div className="flex-1 overflow-y-auto p-3 scrollbar-thin">
-        <p className="mb-3 px-1 text-[11px] leading-relaxed text-white/35">
-          Select up to 4 locations to compare timezones side by side.
-        </p>
-        <div className="space-y-1.5">
-          {locations.map((location) => (
-            <LocationRow
-              key={location.id}
-              location={location}
-              checked={selectedNodes.includes(location.id)}
-              onToggle={onToggle}
+          {open ? (
+            <path d="M18 6L6 18M6 6l12 12" />
+          ) : (
+            <>
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </>
+          )}
+        </svg>
+        {/* Badge */}
+        <AnimatePresence>
+          {selectedNodes.length > 0 && !open && (
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-cyan-400 font-mono text-[9px] font-bold text-gray-950"
+            >
+              {selectedNodes.length}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </button>
+
+      {/* Slide-in panel */}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
             />
-          ))}
-        </div>
-      </div>
-    </div>
+            {/* Panel */}
+            <motion.div
+              className="fixed right-0 top-0 z-50 flex h-full w-[340px] max-w-[85vw] flex-col border-l border-white/[0.08] bg-gray-950/80 backdrop-blur-2xl"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 300 }}
+            >
+              {/* Panel header */}
+              <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
+                <div className="flex items-center gap-2.5">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-4 w-4 text-cyan-400/70"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  </svg>
+                  <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+                    Navigator
+                  </h2>
+                  <AnimatePresence>
+                    {selectedNodes.length > 0 && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-400/20 px-1.5 font-mono text-[10px] font-semibold text-cyan-300"
+                      >
+                        {selectedNodes.length}/4
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="rounded-lg border border-white/10 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wider text-white/50 transition-all hover:border-white/20 hover:bg-white/[0.07] hover:text-white/80"
+                    onClick={onClear}
+                  >
+                    Clear
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition hover:bg-white/10 hover:text-white/80"
+                    aria-label="Close navigator"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      className="h-4 w-4"
+                    >
+                      <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
+                <p className="mb-4 text-[11px] leading-relaxed text-white/35">
+                  Select up to 4 locations to compare timezones side by side.
+                </p>
+                <div className="space-y-1.5">
+                  {locations.map((location) => (
+                    <LocationRow
+                      key={location.id}
+                      location={location}
+                      checked={selectedNodes.includes(location.id)}
+                      onToggle={onToggle}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
