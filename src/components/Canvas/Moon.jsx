@@ -115,37 +115,64 @@ export default function Moon() {
     groupRef.current.position.copy(pos);
   });
 
+  // Derive the orbital plane from two sampled Moon positions
+  const orbitQuat = useMemo(() => {
+    const now = new Date();
+    const later = new Date(now.getTime() + 7 * 86_400_000); // ~1 week later
+    const p1 = getMoonPosition(now);
+    const p2 = getMoonPosition(later);
+    // Normal to the orbital plane = cross product of two position vectors
+    const normal = new THREE.Vector3().crossVectors(p1, p2).normalize();
+    // Torus default normal is Z-axis; rotate Z to the computed normal
+    return new THREE.Quaternion().setFromUnitVectors(
+      new THREE.Vector3(0, 0, 1),
+      normal,
+    );
+  }, []);
+
   return (
-    <group ref={groupRef} position={initialPos}>
-      {/* Moon body */}
-      <mesh>
-        <sphereGeometry args={[MOON_RADIUS, 32, 32]} />
-        <meshToonMaterial
-          map={moonTexture}
-          color="#e8e4df"
-          gradientMap={gradientMap}
-        />
-      </mesh>
-      {/* Subtle glow */}
-      <mesh>
-        <sphereGeometry args={[MOON_RADIUS + 2, 24, 24]} />
+    <>
+      {/* Faint orbit ring aligned to Moon's orbital plane */}
+      <mesh quaternion={orbitQuat}>
+        <torusGeometry args={[MOON_ORBIT_RADIUS, 0.15, 16, 128]} />
         <meshBasicMaterial
-          color="#f5f0e8"
+          color="#94a3b8"
           transparent
-          opacity={0.08}
+          opacity={0.06}
           depthWrite={false}
         />
       </mesh>
-      {/* Outer glow halo */}
-      <mesh>
-        <sphereGeometry args={[MOON_RADIUS + 5, 16, 16]} />
-        <meshBasicMaterial
-          color="#fffbe6"
-          transparent
-          opacity={0.03}
-          depthWrite={false}
-        />
-      </mesh>
-    </group>
+      <group ref={groupRef} position={initialPos}>
+        {/* Moon body */}
+        <mesh>
+          <sphereGeometry args={[MOON_RADIUS, 32, 32]} />
+          <meshToonMaterial
+            map={moonTexture}
+            color="#e8e4df"
+            gradientMap={gradientMap}
+          />
+        </mesh>
+        {/* Subtle glow */}
+        <mesh>
+          <sphereGeometry args={[MOON_RADIUS + 2, 24, 24]} />
+          <meshBasicMaterial
+            color="#f5f0e8"
+            transparent
+            opacity={0.08}
+            depthWrite={false}
+          />
+        </mesh>
+        {/* Outer glow halo */}
+        <mesh>
+          <sphereGeometry args={[MOON_RADIUS + 5, 16, 16]} />
+          <meshBasicMaterial
+            color="#fffbe6"
+            transparent
+            opacity={0.03}
+            depthWrite={false}
+          />
+        </mesh>
+      </group>
+    </>
   );
 }
