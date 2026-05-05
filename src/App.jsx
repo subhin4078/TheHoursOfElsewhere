@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import ToonGlobe from "./components/Canvas/ToonGlobe";
 import Moon from "./components/Canvas/Moon";
+import Sun from "./components/Canvas/Sun";
 import SceneSetup from "./components/Canvas/SceneSetup";
 import LocationCard from "./components/UI/LocationCard";
 import Sidebar from "./components/UI/Sidebar";
@@ -74,6 +75,7 @@ function App() {
           resetSignal={resetSignal}
         />
         <Moon />
+        <Sun />
       </Canvas>
 
       {/* UI Overlay */}
