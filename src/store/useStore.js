@@ -8,6 +8,8 @@ export const useStore = create((set, get) => ({
   selectedNodes: [],
   activeNodeId: null,
   viewMode: "single",
+  timeOffsetMs: 0,
+  setTimeOffset: (ms) => set({ timeOffsetMs: ms }),
   toggleLens: (nodeId) => {
     const { selectedNodes } = get();
     const isSelected = selectedNodes.includes(nodeId);

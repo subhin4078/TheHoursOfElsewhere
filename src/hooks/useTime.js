@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useStore } from "../store/useStore";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -15,6 +16,7 @@ const getQuartileKey = (hour) => {
 
 export const useTime = (ianaTz) => {
   const [tick, setTick] = useState(Date.now());
+  const timeOffsetMs = useStore((s) => s.timeOffsetMs);
 
   useEffect(() => {
     const timer = window.setInterval(() => setTick(Date.now()), 1000);
@@ -22,15 +24,17 @@ export const useTime = (ianaTz) => {
   }, []);
 
   return useMemo(() => {
-    const now = dayjs(tick).tz(ianaTz);
+    const now = dayjs(tick + timeOffsetMs).tz(ianaTz);
+    const isSimulated = timeOffsetMs !== 0;
     const quartileKey = getQuartileKey(now.hour());
 
     return {
       now,
+      isSimulated,
       quartileKey,
       clock: now.format("HH:mm:ss"),
-      syncText: `SYNCED: ${now.format("HH:mm")}`,
+      syncText: isSimulated ? "SIMULATED" : `SYNCED: ${now.format("HH:mm")}`,
       dateText: now.format("ddd, DD MMM YYYY"),
     };
-  }, [tick, ianaTz]);
+  }, [tick, ianaTz, timeOffsetMs]);
 };

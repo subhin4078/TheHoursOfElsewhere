@@ -59,8 +59,8 @@ function Marker({ location, isActive, onSelect }) {
       >
         <sphereGeometry args={[isActive ? 1.8 : 1.4, 20, 20]} />
         <meshStandardMaterial
-          color={isActive ? "#67e8f9" : "#e0f2fe"}
-          emissive={isActive ? "#06b6d4" : "#1e3a5f"}
+          color={isActive ? "#d4aa70" : "#e8ddd0"}
+          emissive={isActive ? "#a07840" : "#3a2e1f"}
           emissiveIntensity={isActive ? 1.2 : 0.3}
           toneMapped={false}
         />
@@ -69,7 +69,7 @@ function Marker({ location, isActive, onSelect }) {
       <mesh>
         <sphereGeometry args={[isActive ? 3.0 : 2.2, 16, 16]} />
         <meshBasicMaterial
-          color={isActive ? "#22d3ee" : "#94a3b8"}
+          color={isActive ? "#d4aa70" : "#8a7a68"}
           transparent
           opacity={isActive ? 0.12 : 0.04}
           depthWrite={false}
@@ -80,7 +80,7 @@ function Marker({ location, isActive, onSelect }) {
         <mesh rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[isActive ? 3.8 : 3.0, 0.12, 16, 48]} />
           <meshBasicMaterial
-            color={isActive ? "#67e8f9" : "#64748b"}
+            color={isActive ? "#d4aa70" : "#6b5f4e"}
             transparent
             opacity={isActive ? 0.8 : 0.35}
           />
@@ -89,7 +89,7 @@ function Marker({ location, isActive, onSelect }) {
         {isActive && (
           <mesh rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[5.2, 0.06, 16, 48]} />
-            <meshBasicMaterial color="#22d3ee" transparent opacity={0.25} />
+            <meshBasicMaterial color="#c8a060" transparent opacity={0.25} />
           </mesh>
         )}
       </group>
@@ -97,7 +97,7 @@ function Marker({ location, isActive, onSelect }) {
       <mesh ref={beamRef} quaternion={quaternion}>
         <cylinderGeometry args={[0.3, 1.5, 18, 8, 1, true]} />
         <meshBasicMaterial
-          color="#22d3ee"
+          color="#d4aa70"
           transparent
           opacity={0}
           side={THREE.DoubleSide}
@@ -230,15 +230,15 @@ export default function ToonGlobe({
       {/* Cartoon ink outline */}
       <mesh>
         <sphereGeometry args={[GLOBE_RADIUS + 0.6, 64, 64]} />
-        <meshBasicMaterial color="#0c4a6e" side={THREE.BackSide} />
+        <meshBasicMaterial color="#1a1410" side={THREE.BackSide} />
       </mesh>
       {/* Subtle inner edge highlight */}
       <mesh>
         <sphereGeometry args={[GLOBE_RADIUS - 0.2, 48, 48]} />
         <meshBasicMaterial
-          color="#0ea5e9"
+          color="#d4aa70"
           transparent
-          opacity={0.04}
+          opacity={0.02}
           side={THREE.BackSide}
         />
       </mesh>

@@ -7,6 +7,7 @@ import Moon from "./components/Canvas/Moon";
 import SceneSetup from "./components/Canvas/SceneSetup";
 import LocationCard from "./components/UI/LocationCard";
 import Sidebar from "./components/UI/Sidebar";
+import TimeScrubber from "./components/UI/TimeScrubber";
 import MultiViewGrid from "./components/Views/MultiViewGrid";
 import { useStore } from "./store/useStore";
 
@@ -15,6 +16,7 @@ function App() {
     useStore();
   const [focusTarget, setFocusTarget] = useState(new THREE.Vector3(0, 0, 0));
   const [resetSignal, setResetSignal] = useState(0);
+  const [panelOpen, setPanelOpen] = useState(false);
   const isCompareMode = selectedNodes.length > 1;
 
   const handleReset = () => {
@@ -30,6 +32,11 @@ function App() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [clearSelection]);
+
+  // Auto-open panel when a location is selected
+  useEffect(() => {
+    if (activeNodeId) setPanelOpen(true);
+  }, [activeNodeId]);
 
   const activeLocation = useMemo(
     () => locations.find((location) => location.id === activeNodeId) ?? null,
@@ -47,7 +54,7 @@ function App() {
   };
 
   return (
-    <div className="relative h-full w-full bg-black">
+    <div className="relative h-full w-full bg-[#0a0c10]">
       {/* 3D Canvas */}
       <Canvas
         camera={{ position: [0, 0, 300], fov: 48 }}
@@ -58,7 +65,7 @@ function App() {
           powerPreference: "high-performance",
         }}
       >
-        <color attach="background" args={["#030712"]} />
+        <color attach="background" args={["#0a0c10"]} />
         <SceneSetup focusTarget={focusTarget} resetSignal={resetSignal} />
         <ToonGlobe
           locations={locations}
@@ -70,45 +77,29 @@ function App() {
       </Canvas>
 
       {/* UI Overlay */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col">
+      <div className="pointer-events-none absolute inset-0">
         {/* Header */}
         <motion.header
-          className="pointer-events-none relative z-30 flex items-center justify-between px-5 py-4"
-          initial={{ opacity: 0, y: -12 }}
+          className="pointer-events-none relative z-30 flex items-center justify-between px-6 py-5"
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.5 }}
         >
           {/* Left — Brand */}
-          <div className="pointer-events-auto flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/[0.07] shadow-[0_0_24px_-6px_rgba(34,211,238,0.15)]">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-5 w-5 text-cyan-300"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 6v6l4 2" />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-[15px] font-semibold tracking-[0.04em] text-white/90">
-                The Hours of Elsewhere
-              </h1>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-cyan-400/50">
-                Global Time Explorer
-              </p>
-            </div>
+          <div className="pointer-events-auto">
+            <h1 className="text-[15px] font-light tracking-[0.06em] text-white/80">
+              The Hours of Elsewhere
+            </h1>
+            <p className="mt-0.5 text-[11px] tracking-widest text-white/25">
+              World time explorer
+            </p>
           </div>
 
           {/* Right — Actions */}
           <div className="pointer-events-auto flex items-center gap-2">
             <button
               onClick={handleReset}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] text-cyan-300/80 transition-all hover:border-cyan-400/50 hover:bg-cyan-400/15 hover:text-cyan-200"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/40 hover:border-white/20 hover:bg-white/[0.06] hover:text-white/70"
               aria-label="Reset view"
               title="Reset view"
             >
@@ -116,10 +107,10 @@ function App() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="1.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4"
+                className="h-3.5 w-3.5"
               >
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
@@ -134,52 +125,26 @@ function App() {
           </div>
         </motion.header>
 
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* Status bar */}
-        <motion.div
-          className="pointer-events-none z-20 px-5 pb-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <div className="glow-line mb-2" />
-          <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/25">
-            <span>{locations.length} nodes indexed</span>
-            <span>
-              {selectedNodes.length > 0
-                ? `${selectedNodes.length} active trace${selectedNodes.length > 1 ? "s" : ""}`
-                : "No active traces"}
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Bottom panels */}
+        {/* Bottom-left panel: LocationCard + TimeScrubber */}
         <AnimatePresence mode="wait">
           {isCompareMode ? (
             <motion.section
               key="grid"
-              className="pointer-events-auto z-20 px-5 pb-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="pointer-events-auto absolute inset-x-6 bottom-5 z-20"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.35 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="hud-panel mx-auto w-full max-w-[1200px] rounded-2xl p-3">
-                <div className="mb-2 flex items-center justify-between px-1">
-                  <div className="flex items-center gap-2.5">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">
-                      Compare View
-                    </p>
-                    <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-400/15 px-1.5 font-mono text-[10px] font-semibold text-cyan-300/80">
-                      {selectedLocations.length}
-                    </span>
-                  </div>
+              <div className="card mx-auto w-full max-w-[1200px] rounded-2xl p-3">
+                <div className="mb-2.5 flex items-center justify-between px-1">
+                  <p className="text-[12px] font-medium text-white/45">
+                    Comparing {selectedLocations.length} locations
+                  </p>
                   <button
                     type="button"
                     onClick={clearSelection}
-                    className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-[11px] font-medium text-white/50 transition-all hover:border-white/20 hover:bg-white/[0.06] hover:text-white/80"
+                    className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-white/40 hover:border-white/20 hover:bg-white/[0.05] hover:text-white/70"
                   >
                     <svg
                       viewBox="0 0 12 12"
@@ -191,8 +156,8 @@ function App() {
                       <path d="M3 3l6 6M9 3l-6 6" />
                     </svg>
                     Close
-                    <kbd className="ml-1 rounded border border-white/10 px-1 text-[9px] text-white/30">
-                      ESC
+                    <kbd className="ml-1 rounded border border-white/10 px-1 text-[9px] text-white/25">
+                      Esc
                     </kbd>
                   </button>
                 </div>
@@ -202,16 +167,51 @@ function App() {
               </div>
             </motion.section>
           ) : (
-            <motion.section
+            <motion.div
               key="single"
-              className="pointer-events-auto z-20 px-5 pb-4"
-              initial={{ opacity: 0, y: 14 }}
+              className="pointer-events-auto absolute bottom-5 left-6 z-20 w-[min(92vw,380px)]"
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.28 }}
             >
-              <LocationCard location={activeLocation} />
-            </motion.section>
+              {/* Expand / collapse toggle */}
+              <button
+                onClick={() => setPanelOpen((v) => !v)}
+                className="mb-2 flex items-center gap-1.5 rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 text-[11px] text-white/45 backdrop-blur-md hover:border-white/20 hover:text-white/70"
+              >
+                <motion.svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-3.5 w-3.5"
+                  animate={{ rotate: panelOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <path d="M3 10l5-5 5 5" />
+                </motion.svg>
+                <span>{panelOpen ? "Collapse" : "Explore"}</span>
+              </button>
+
+              {/* Collapsible content */}
+              <AnimatePresence>
+                {panelOpen && (
+                  <motion.div
+                    className="space-y-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <LocationCard location={activeLocation} />
+                    <TimeScrubber />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

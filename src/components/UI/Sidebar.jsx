@@ -12,24 +12,24 @@ function LocationRow({ location, checked, onToggle }) {
       onClick={() => onToggle(location.id)}
       className={`group relative w-full rounded-xl border px-3 py-2.5 text-left transition-all duration-200 ${
         checked
-          ? "border-cyan-400/40 bg-cyan-400/10 shadow-[0_0_20px_-4px_rgba(34,211,238,0.15)]"
-          : "border-white/[0.06] bg-white/[0.03] hover:border-white/15 hover:bg-white/[0.07]"
+          ? "border-[#d4aa70]/30 bg-[#d4aa70]/[0.07]"
+          : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12] hover:bg-white/[0.05]"
       }`}
     >
       <div className="flex items-center gap-2.5">
-        {/* Selection indicator */}
+        {/* Checkbox */}
         <div
-          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all duration-200 ${
+          className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-all duration-200 ${
             checked
-              ? "border-cyan-400/60 bg-cyan-400/20"
-              : "border-white/15 bg-white/5 group-hover:border-white/25"
+              ? "border-[#d4aa70]/50 bg-[#d4aa70]/20"
+              : "border-white/15 bg-transparent group-hover:border-white/25"
           }`}
         >
           {checked && (
             <motion.svg
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="h-3 w-3 text-cyan-300"
+              className="h-2.5 w-2.5 text-[#d4aa70]"
               viewBox="0 0 12 12"
               fill="none"
             >
@@ -46,22 +46,14 @@ function LocationRow({ location, checked, onToggle }) {
         {/* Location info */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span className="truncate text-sm font-medium text-white/90">
+            <span className="truncate text-[13px] font-medium text-white/85">
               {location.name}
             </span>
-            <span className="shrink-0 font-mono text-xs tabular-nums text-cyan-300/70">
+            <span className="shrink-0 font-mono text-[12px] tabular-nums text-white/40">
               {clock}
             </span>
           </div>
-          <div className="mt-0.5 flex items-center gap-2">
-            <span className="text-[11px] text-white/40">
-              {location.country}
-            </span>
-            <span className="text-[10px] text-white/25">
-              {location.coordinates.lat.toFixed(1)}&deg;,{" "}
-              {location.coordinates.lng.toFixed(1)}&deg;
-            </span>
-          </div>
+          <p className="mt-0.5 text-[11px] text-white/30">{location.country}</p>
         </div>
       </div>
     </motion.button>
@@ -78,21 +70,21 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Toggle button — always visible */}
+      {/* Toggle button */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/[0.07] text-cyan-300/80 transition-all hover:border-cyan-400/50 hover:bg-cyan-400/15 hover:text-cyan-200"
-        aria-label="Toggle navigator"
+        className="relative flex h-8 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-[12px] text-white/50 hover:border-white/20 hover:bg-white/[0.07] hover:text-white/75"
+        aria-label="Toggle locations"
       >
         <svg
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.8"
+          strokeWidth="1.6"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="h-4 w-4"
+          className="h-3.5 w-3.5"
         >
           {open ? (
             <path d="M18 6L6 18M6 6l12 12" />
@@ -102,14 +94,14 @@ export default function Sidebar({
             </>
           )}
         </svg>
-        {/* Badge */}
+        <span>Locations</span>
         <AnimatePresence>
           {selectedNodes.length > 0 && !open && (
             <motion.span
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
-              className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-cyan-400 font-mono text-[9px] font-bold text-gray-950"
+              className="flex h-4 w-4 items-center justify-center rounded-full bg-[#d4aa70] font-mono text-[9px] font-semibold text-black"
             >
               {selectedNodes.length}
             </motion.span>
@@ -123,7 +115,7 @@ export default function Sidebar({
           <>
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              className="fixed inset-0 z-40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -131,7 +123,7 @@ export default function Sidebar({
             />
             {/* Panel */}
             <motion.div
-              className="fixed right-0 top-0 z-50 flex h-full w-[340px] max-w-[85vw] flex-col border-l border-white/[0.08] bg-gray-950/80 backdrop-blur-2xl"
+              className="fixed right-0 top-0 z-50 flex h-full w-[320px] max-w-[85vw] flex-col border-l border-white/[0.07] bg-[#0c0e13]/90 backdrop-blur-2xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -139,48 +131,31 @@ export default function Sidebar({
             >
               {/* Panel header */}
               <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
-                <div className="flex items-center gap-2.5">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-4 w-4 text-cyan-400/70"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                  </svg>
-                  <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Navigator
+                <div>
+                  <h2 className="text-[13px] font-medium text-white/75">
+                    Locations
                   </h2>
-                  <AnimatePresence>
-                    {selectedNodes.length > 0 && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-400/20 px-1.5 font-mono text-[10px] font-semibold text-cyan-300"
-                      >
-                        {selectedNodes.length}/4
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
+                  <p className="mt-0.5 text-[11px] text-white/30">
+                    {selectedNodes.length > 0
+                      ? `${selectedNodes.length} of 4 selected`
+                      : "Select up to 4 to compare"}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="rounded-lg border border-white/10 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wider text-white/50 transition-all hover:border-white/20 hover:bg-white/[0.07] hover:text-white/80"
-                    onClick={onClear}
-                  >
-                    Clear
-                  </button>
+                  {selectedNodes.length > 0 && (
+                    <button
+                      type="button"
+                      className="rounded-lg border border-white/10 px-2.5 py-1 text-[11px] text-white/40 hover:border-white/20 hover:bg-white/[0.05] hover:text-white/70"
+                      onClick={onClear}
+                    >
+                      Clear
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition hover:bg-white/10 hover:text-white/80"
-                    aria-label="Close navigator"
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-white/35 hover:bg-white/[0.07] hover:text-white/70"
+                    aria-label="Close"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -196,11 +171,8 @@ export default function Sidebar({
                 </div>
               </div>
               {/* Body */}
-              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
-                <p className="mb-4 text-[11px] leading-relaxed text-white/35">
-                  Select up to 4 locations to compare timezones side by side.
-                </p>
-                <div className="space-y-1.5">
+              <div className="flex-1 overflow-y-auto p-3 scrollbar-thin">
+                <div className="space-y-1">
                   {locations.map((location) => (
                     <LocationRow
                       key={location.id}
