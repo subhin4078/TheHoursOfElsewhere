@@ -124,18 +124,6 @@ export default function ToonGlobe({
     g.atmosphereColor("#60d0ff");
     g.atmosphereAltitude(0.18);
 
-    // Soft 4-tone cel-shading gradient map (brighter base)
-    const tones = new Uint8Array([100, 160, 210, 245]);
-    const gradientMap = new THREE.DataTexture(
-      tones,
-      4,
-      1,
-      THREE.LuminanceFormat,
-    );
-    gradientMap.minFilter = THREE.NearestFilter;
-    gradientMap.magFilter = THREE.NearestFilter;
-    gradientMap.needsUpdate = true;
-
     // Load texture, posterize it on a canvas for a cartoon look, then apply
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -178,9 +166,10 @@ export default function ToonGlobe({
       const cartoonTex = new THREE.CanvasTexture(canvas);
       cartoonTex.colorSpace = THREE.SRGBColorSpace;
 
-      const toonMat = new THREE.MeshToonMaterial({
+      const toonMat = new THREE.MeshPhongMaterial({
         map: cartoonTex,
-        gradientMap,
+        shininess: 8,
+        specular: new THREE.Color(0x223344),
       });
       g.globeMaterial(toonMat);
     };

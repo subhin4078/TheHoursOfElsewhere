@@ -1,11 +1,15 @@
 import { OrbitControls, Stars } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { getSunPosition } from "../../utils/solar";
 
 export default function SceneSetup({ focusTarget, resetSignal }) {
   const { camera } = useThree();
   const controlsRef = useRef();
+
+  // Sun position drives the main directional light — computed once on mount
+  const sunPos = useMemo(() => getSunPosition(300), []);
 
   useEffect(() => {
     if (!resetSignal) return;
@@ -50,23 +54,22 @@ export default function SceneSetup({ focusTarget, resetSignal }) {
 
   return (
     <>
-      <ambientLight intensity={1.8} color="#ffffff" />
+      <ambientLight intensity={1.5} color="#d8dce8" />
+
+      {/* Main sunlight */}
       <directionalLight
-        intensity={2.2}
-        position={[200, 180, 150]}
-        color="#ffffff"
+        intensity={5.0}
+        position={[sunPos.x, sunPos.y, sunPos.z]}
+        color="#fff8e8"
       />
+
+      {/* Night-side fill */}
       <directionalLight
-        intensity={0.8}
-        position={[-150, -80, -100]}
-        color="#cce8ff"
+        intensity={1.5}
+        position={[-sunPos.x * 0.6, -sunPos.y * 0.6, -sunPos.z * 0.6]}
+        color="#4a5a7a"
       />
-      <pointLight
-        position={[0, 0, 0]}
-        intensity={0.15}
-        color="#22d3ee"
-        distance={200}
-      />
+
       <fog attach="fog" args={["#000000", 500, 900]} />
       <Stars
         radius={350}

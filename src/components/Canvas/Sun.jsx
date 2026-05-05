@@ -1,30 +1,6 @@
 import { useMemo } from "react";
 import * as THREE from "three";
-
-const SUN_DISTANCE = 520;
-
-/**
- * Simplified solar position — sun orbits based on UTC hour and day of year.
- * Gives a plausible sky position for the 3D scene.
- */
-function getSunPosition() {
-  const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((now - startOfYear) / 86_400_000);
-  const hourUTC = now.getUTCHours() + now.getUTCMinutes() / 60;
-
-  // Hour angle: noon UTC = front of scene (positive Z)
-  const hourAngle = ((hourUTC / 24) * Math.PI * 2 - Math.PI) * -1;
-  // Declination: axial tilt ±23.5°
-  const declination =
-    ((23.5 * Math.PI) / 180) * Math.sin(((dayOfYear - 80) / 365) * Math.PI * 2);
-
-  return new THREE.Vector3(
-    SUN_DISTANCE * Math.cos(declination) * Math.sin(hourAngle),
-    SUN_DISTANCE * Math.sin(declination),
-    SUN_DISTANCE * Math.cos(declination) * Math.cos(hourAngle),
-  );
-}
+import { getSunPosition } from "../../utils/solar";
 
 function makeGlowSprite(innerColor, outerColor) {
   const size = 256;
@@ -48,7 +24,7 @@ function makeGlowSprite(innerColor, outerColor) {
 }
 
 export default function Sun() {
-  const sunPos = useMemo(() => getSunPosition(), []);
+  const sunPos = useMemo(() => getSunPosition(520), []);
 
   const coronaTexture = useMemo(
     () => makeGlowSprite("rgba(255,252,220,1)", "rgba(255,200,80,0.7)"),

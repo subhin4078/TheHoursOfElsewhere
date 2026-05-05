@@ -21,10 +21,28 @@ export default function LocationCard({ location }) {
           fill="none"
           className="mb-4 h-10 w-10 text-white/[0.08]"
         >
-          <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="1.5" />
-          <ellipse cx="32" cy="32" rx="12" ry="28" stroke="currentColor" strokeWidth="1" />
+          <circle
+            cx="32"
+            cy="32"
+            r="28"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <ellipse
+            cx="32"
+            cy="32"
+            rx="12"
+            ry="28"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
           <path d="M4 32h56" stroke="currentColor" strokeWidth="1" />
-          <path d="M8 18h48M8 46h48" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3" />
+          <path
+            d="M8 18h48M8 46h48"
+            stroke="currentColor"
+            strokeWidth="0.5"
+            strokeDasharray="3 3"
+          />
         </svg>
         <p className="text-[13px] leading-relaxed text-white/40">
           Tap a location on the globe to explore its local time.
