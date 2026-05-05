@@ -166,6 +166,9 @@ function App() {
                 <div className="h-[42vh] min-h-[220px] max-h-[380px]">
                   <MultiViewGrid selectedLocations={selectedLocations} />
                 </div>
+                <div className="mt-2">
+                  <TimeScrubber />
+                </div>
               </div>
             </motion.section>
           ) : (
