@@ -1,9 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useStore } from "../../store/useStore";
 
 const MIN_H = -12;
 const MAX_H = 12;
 const STEP_H = 0.25;
+// +2 simulated hours per real second
+const HOURS_PER_MS = 2 / 1000;
 
 function formatOffset(hours) {
   if (hours === 0) return "Live";
@@ -17,15 +20,82 @@ function formatOffset(hours) {
 export default function TimeScrubber() {
   const timeOffsetMs = useStore((s) => s.timeOffsetMs);
   const setTimeOffset = useStore((s) => s.setTimeOffset);
+  const locations = useStore((s) => s.locations);
+  const activeNodeId = useStore((s) => s.activeNodeId);
+  const clearSelection = useStore((s) => s.clearSelection);
+  const toggleLens = useStore((s) => s.toggleLens);
 
   const offsetH = timeOffsetMs / 3_600_000;
   const isSimulated = timeOffsetMs !== 0;
 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const rafRef = useRef(null);
+  const lastTsRef = useRef(null);
+  // Tracks current offset internally during playback to avoid stale closures
+  const offsetHRef = useRef(offsetH);
+  // Always-fresh callback for picking a random location on each loop
+  const pickRandomLocationRef = useRef(null);
+  pickRandomLocationRef.current = () => {
+    const pool = locations.filter((l) => l.id !== activeNodeId);
+    const next = (pool.length > 0 ? pool : locations)[
+      Math.floor(Math.random() * (pool.length > 0 ? pool.length : locations.length))
+    ];
+    clearSelection();
+    toggleLens(next.id);
+  };
+
+  // Keep ref in sync with store when NOT playing (user dragged slider)
+  useEffect(() => {
+    if (!isPlaying) {
+      offsetHRef.current = timeOffsetMs / 3_600_000;
+    }
+  }, [timeOffsetMs, isPlaying]);
+
+  const tick = useCallback(
+    (ts) => {
+      if (lastTsRef.current === null) lastTsRef.current = ts;
+      const deltaMs = ts - lastTsRef.current;
+      lastTsRef.current = ts;
+
+      let nextH = offsetHRef.current + deltaMs * HOURS_PER_MS;
+      let loopCompleted = false;
+      if (nextH > MAX_H) {
+        loopCompleted = true;
+        nextH = MIN_H + (nextH - MAX_H);
+      }
+      offsetHRef.current = nextH;
+      setTimeOffset(nextH * 3_600_000);
+
+      if (loopCompleted) {
+        pickRandomLocationRef.current?.();
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    },
+    [setTimeOffset],
+  );
+
+  useEffect(() => {
+    if (isPlaying) {
+      lastTsRef.current = null;
+      rafRef.current = requestAnimationFrame(tick);
+    } else {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    }
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isPlaying, tick]);
+
   const handleChange = (e) => {
+    setIsPlaying(false);
     setTimeOffset(parseFloat(e.target.value) * 3_600_000);
   };
 
-  const handleReset = () => setTimeOffset(0);
+  const handleReset = () => {
+    setIsPlaying(false);
+    setTimeOffset(0);
+  };
 
   const pct = ((offsetH - MIN_H) / (MAX_H - MIN_H)) * 100;
 
@@ -47,6 +117,30 @@ export default function TimeScrubber() {
           >
             {formatOffset(offsetH)}
           </span>
+
+          {/* Play / Stop button */}
+          <motion.button
+            onClick={() => setIsPlaying((v) => !v)}
+            className={`flex h-5 w-5 items-center justify-center rounded border transition-colors ${
+              isPlaying
+                ? "border-[#d4aa70]/50 bg-[#d4aa70]/15 text-[#d4aa70]"
+                : "border-white/15 bg-white/[0.04] text-white/45 hover:border-white/25 hover:text-white/70"
+            }`}
+            title={isPlaying ? "Stop" : "Play time-lapse (changes location each loop)"}
+            whileTap={{ scale: 0.9 }}
+          >
+            {isPlaying ? (
+              <svg viewBox="0 0 10 10" className="h-2.5 w-2.5" fill="currentColor">
+                <rect x="1.5" y="1" width="2.5" height="8" rx="0.5" />
+                <rect x="6" y="1" width="2.5" height="8" rx="0.5" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 10 10" className="h-2.5 w-2.5" fill="currentColor">
+                <path d="M2 1.5l7 3.5-7 3.5V1.5z" />
+              </svg>
+            )}
+          </motion.button>
+
           <AnimatePresence>
             {isSimulated && (
               <motion.button
