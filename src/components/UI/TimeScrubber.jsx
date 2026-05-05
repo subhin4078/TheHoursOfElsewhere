@@ -5,8 +5,8 @@ import { useStore } from "../../store/useStore";
 const MIN_H = -12;
 const MAX_H = 12;
 const STEP_H = 0.25;
-// +2 simulated hours per real second
-const HOURS_PER_MS = 2 / 1000;
+// +1 simulated hour per real second
+const HOURS_PER_MS = 1 / 1000;
 
 function formatOffset(hours) {
   if (hours === 0) return "Live";
@@ -21,7 +21,7 @@ export default function TimeScrubber() {
   const timeOffsetMs = useStore((s) => s.timeOffsetMs);
   const setTimeOffset = useStore((s) => s.setTimeOffset);
   const locations = useStore((s) => s.locations);
-  const activeNodeId = useStore((s) => s.activeNodeId);
+  const selectedNodes = useStore((s) => s.selectedNodes);
   const clearSelection = useStore((s) => s.clearSelection);
   const toggleLens = useStore((s) => s.toggleLens);
 
@@ -33,15 +33,17 @@ export default function TimeScrubber() {
   const lastTsRef = useRef(null);
   // Tracks current offset internally during playback to avoid stale closures
   const offsetHRef = useRef(offsetH);
-  // Always-fresh callback for picking a random location on each loop
+  // Always-fresh callback for picking random locations on each loop
   const pickRandomLocationRef = useRef(null);
   pickRandomLocationRef.current = () => {
-    const pool = locations.filter((l) => l.id !== activeNodeId);
-    const next = (pool.length > 0 ? pool : locations)[
-      Math.floor(Math.random() * (pool.length > 0 ? pool.length : locations.length))
-    ];
+    const count = Math.max(1, selectedNodes.length);
+    // Prefer locations not in current selection; fall back to full list if needed
+    const available = locations.filter((l) => !selectedNodes.includes(l.id));
+    const pool = available.length >= count ? available : locations;
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    const picks = shuffled.slice(0, Math.min(count, shuffled.length));
     clearSelection();
-    toggleLens(next.id);
+    picks.forEach((loc) => toggleLens(loc.id));
   };
 
   // Keep ref in sync with store when NOT playing (user dragged slider)
