@@ -1,4 +1,4 @@
-export const TRACE_PLACEHOLDER_IMAGE = "/assets/tokyo_morning.png";
+export const TRACE_PLACEHOLDER_IMAGE = "/assets/Kyoto Japan/kyoto_morning.jpg";
 
 export const getTraceForQuartile = (location, quartileKey) => {
   const fallback = {

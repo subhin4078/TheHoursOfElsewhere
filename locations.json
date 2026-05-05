@@ -1,86 +1,156 @@
 [
   {
-    "id": "lake-bled-slv",
-    "name": "Lake Bled",
-    "country": "Slovenia",
-    "coordinates": { "lat": 46.3639, "lng": 14.0938 },
-    "timezone": "Europe/Ljubljana",
-    "narrative": "A solitary church on an island of glacial blue. The silence here is a living thing.",
+    "id": "cape-town-zaf",
+    "name": "Cape Town",
+    "country": "South Africa",
+    "coordinates": { "lat": -33.9249, "lng": 18.4241 },
+    "timezone": "Africa/Johannesburg",
+    "narrative": "Where the Atlantic and Indian Oceans meet beneath Table Mountain. A city caught between two seas.",
     "quartiles": {
-      "0000-0600": { "label": "The Deep Blue", "image": "/assets/traces/bled_night.jpg" },
-      "0600-1200": { "label": "The Morning Mist", "image": "/assets/traces/bled_dawn.jpg" },
-      "1200-1800": { "label": "Alpine Noon", "image": "/assets/traces/bled_day.jpg" },
-      "1800-0000": { "label": "The Cooling Earth", "image": "/assets/traces/bled_dusk.jpg" }
+      "0000-0600": { "label": "Southern Cross", "image": "/assets/Cape Town South Africa/africa_dawn.jpg" },
+      "0600-1200": { "label": "Morning Over the Cape", "image": "/assets/Cape Town South Africa/africa_morning.jpg" },
+      "1200-1800": { "label": "Table Mountain Light", "image": "/assets/Cape Town South Africa/africa_afternoon.jpg" },
+      "1800-0000": { "label": "Atlantic Dusk", "image": "/assets/Cape Town South Africa/africa_night.jpg" }
     }
   },
   {
-    "id": "shibuya-jpn",
-    "name": "Shibuya",
-    "country": "Japan",
-    "coordinates": { "lat": 35.6595, "lng": 139.7005 },
-    "timezone": "Asia/Tokyo",
-    "narrative": "The electric heartbeat of the archipelago. A thousand directions, all taken at once.",
-    "quartiles": {
-      "0000-0600": { "label": "Neon Afterglow", "image": "/assets/traces/tokyo_late.jpg" },
-      "0600-1200": { "label": "The Great Awakening", "image": "/assets/traces/tokyo_morning.jpg" },
-      "1200-1800": { "label": "Vertical Shadows", "image": "/assets/traces/tokyo_noon.jpg" },
-      "1800-0000": { "label": "Cyberpunk Sunset", "image": "/assets/traces/tokyo_night.jpg" }
-    }
-  },
-  {
-    "id": "reykjavik-isl",
-    "name": "Reykjavík",
+    "id": "blue-lagoon-isl",
+    "name": "Blue Lagoon",
     "country": "Iceland",
-    "coordinates": { "lat": 64.1265, "lng": -21.8174 },
+    "coordinates": { "lat": 63.8800, "lng": -22.4470 },
     "timezone": "Atlantic/Reykjavik",
-    "narrative": "Where basalt meets the spray of the North Atlantic. The wind here carries ancient rumors.",
+    "narrative": "Geothermal waters glow electric blue against black lava. Steam rises to meet a sky without darkness.",
     "quartiles": {
-      "0000-0600": { "label": "Arctic Stillness", "image": "/assets/traces/rey_night.jpg" },
-      "0600-1200": { "label": "The Pale Sun", "image": "/assets/traces/rey_dawn.jpg" },
-      "1200-1800": { "label": "Glacial Light", "image": "/assets/traces/rey_day.jpg" },
-      "1800-0000": { "label": "Twilight Echoes", "image": "/assets/traces/rey_dusk.jpg" }
+      "0000-0600": { "label": "Arctic Midnight", "image": "/assets/Iceland blue lagoon/iceland_dawn.jpg" },
+      "0600-1200": { "label": "The Pale Awakening", "image": "/assets/Iceland blue lagoon/iceland_morning.jpg" },
+      "1200-1800": { "label": "Volcanic Noon", "image": "/assets/Iceland blue lagoon/iceland_afternoon.jpg" },
+      "1800-0000": { "label": "Midnight Blue", "image": "/assets/Iceland blue lagoon/iceland_night.png" }
     }
   },
   {
-    "id": "marrakech-mar",
-    "name": "Marrakech",
-    "country": "Morocco",
-    "coordinates": { "lat": 31.6295, "lng": -7.9811 },
-    "timezone": "Africa/Casablanca",
-    "narrative": "An ochre labyrinth smelling of saffron and heat. Time moves differently within the red walls.",
+    "id": "kyoto-jpn",
+    "name": "Kyoto",
+    "country": "Japan",
+    "coordinates": { "lat": 35.0116, "lng": 135.7681 },
+    "timezone": "Asia/Tokyo",
+    "narrative": "Ancient temples wrapped in cedar and cedar smoke. The old capital holds its breath.",
     "quartiles": {
-      "0000-0600": { "label": "Desert Chill", "image": "/assets/traces/mar_night.jpg" },
-      "0600-1200": { "label": "The Pink City", "image": "/assets/traces/mar_morning.jpg" },
-      "1200-1800": { "label": "Burning Noon", "image": "/assets/traces/mar_day.jpg" },
-      "1800-0000": { "label": "Dusk over Medina", "image": "/assets/traces/mar_dusk.jpg" }
+      "0000-0600": { "label": "Temple Silence", "image": "/assets/Kyoto Japan/kyoto_dawn.jpg" },
+      "0600-1200": { "label": "The Garden Mist", "image": "/assets/Kyoto Japan/kyoto_morning.jpg" },
+      "1200-1800": { "label": "Vermillion Afternoon", "image": "/assets/Kyoto Japan/kyoto_afternoon.jpg" },
+      "1800-0000": { "label": "Lantern Dusk", "image": "/assets/Kyoto Japan/kyoto_night.jpg" }
     }
   },
   {
-    "id": "vancouver-can",
-    "name": "Stanley Park",
-    "country": "Canada",
-    "coordinates": { "lat": 49.3017, "lng": -123.1431 },
-    "timezone": "America/Vancouver",
-    "narrative": "Where the cedar forests meet the Pacific tides. The emerald edge of the continent.",
+    "id": "new-york-usa",
+    "name": "New York City",
+    "country": "USA",
+    "coordinates": { "lat": 40.7128, "lng": -74.0060 },
+    "timezone": "America/New_York",
+    "narrative": "Eight million stories layered in glass and steel. The city that never surrenders to the dark.",
     "quartiles": {
-      "0000-0600": { "label": "Pacific Fog", "image": "/assets/traces/van_night.jpg" },
-      "0600-1200": { "label": "The First Light", "image": "/assets/traces/van_dawn.jpg" },
-      "1200-1800": { "label": "Raincoast Noon", "image": "/assets/traces/van_day.jpg" },
-      "1800-0000": { "label": "The Golden Pier", "image": "/assets/traces/van_dusk.jpg" }
+      "0000-0600": { "label": "The City That Never Sleeps", "image": "/assets/New York USA/usa_dawn.png" },
+      "0600-1200": { "label": "Manhattan Rising", "image": "/assets/New York USA/usa_morning.jpg" },
+      "1200-1800": { "label": "Fifth Avenue Light", "image": "/assets/New York USA/usa_afternoon.jpg" },
+      "1800-0000": { "label": "Skyline at Dusk", "image": "/assets/New York USA/usa_night.jpg" }
     }
   },
   {
-    "id": "venice-ita",
-    "name": "Venice",
+    "id": "rio-bra",
+    "name": "Rio de Janeiro",
+    "country": "Brazil",
+    "coordinates": { "lat": -22.9068, "lng": -43.1729 },
+    "timezone": "America/Sao_Paulo",
+    "narrative": "Christ the Redeemer stretches his arms over a carnival of mountains and sea.",
+    "quartiles": {
+      "0000-0600": { "label": "Favela Glow", "image": "/assets/Rio de Janeiro Brazil/brazil_dawn.jpg" },
+      "0600-1200": { "label": "Ipanema Morning", "image": "/assets/Rio de Janeiro Brazil/brazil_morning.jpg" },
+      "1200-1800": { "label": "Copacabana Heat", "image": "/assets/Rio de Janeiro Brazil/brazil_afternoon.jpg" },
+      "1800-0000": { "label": "Guanabara Dusk", "image": "/assets/Rio de Janeiro Brazil/brazil_night.jpg" }
+    }
+  },
+  {
+    "id": "rome-ita",
+    "name": "Rome",
     "country": "Italy",
-    "coordinates": { "lat": 45.4408, "lng": 12.3155 },
+    "coordinates": { "lat": 41.9028, "lng": 12.4964 },
     "timezone": "Europe/Rome",
-    "narrative": "A city floating on a dream of the past. The water reflects centuries of fading gold.",
+    "narrative": "Every cobblestone a thousand years old. The Eternal City breathes history with every hour.",
     "quartiles": {
-      "0000-0600": { "label": "Canal Silence", "image": "/assets/traces/ven_night.jpg" },
-      "0600-1200": { "label": "The Rising Tide", "image": "/assets/traces/ven_dawn.jpg" },
-      "1200-1800": { "label": "Gondola Shadows", "image": "/assets/traces/ven_day.jpg" },
-      "1800-0000": { "label": "Adria Blue", "image": "/assets/traces/ven_dusk.jpg" }
+      "0000-0600": { "label": "Before the Colosseum Wakes", "image": "/assets/Rome Italy/italy_dawn.jpg" },
+      "0600-1200": { "label": "Travertine Light", "image": "/assets/Rome Italy/italy_morning.jpg" },
+      "1200-1800": { "label": "Forum Noon", "image": "/assets/Rome Italy/italy_afternoon.jpg" },
+      "1800-0000": { "label": "The Golden Hour Eternal", "image": "/assets/Rome Italy/italy_night.jpg" }
+    }
+  },
+  {
+    "id": "santorini-grc",
+    "name": "Santorini",
+    "country": "Greece",
+    "coordinates": { "lat": 36.3932, "lng": 25.4615 },
+    "timezone": "Europe/Athens",
+    "narrative": "Blue domes against a Cycladic sky. The caldera holds the memory of a vanished world.",
+    "quartiles": {
+      "0000-0600": { "label": "Aegean Before Dawn", "image": "/assets/Santorini Greece/greece_dawn.avif" },
+      "0600-1200": { "label": "Whitewashed Morning", "image": "/assets/Santorini Greece/greece_morning.jpg" },
+      "1200-1800": { "label": "Caldera Afternoon", "image": "/assets/Santorini Greece/greece_afternoon.jpg" },
+      "1800-0000": { "label": "Oia Sunset", "image": "/assets/Santorini Greece/greece_night.jpg" }
+    }
+  },
+  {
+    "id": "sydney-aus",
+    "name": "Sydney Opera House",
+    "country": "Australia",
+    "coordinates": { "lat": -33.8568, "lng": 151.2153 },
+    "timezone": "Australia/Sydney",
+    "narrative": "Sails of concrete rise from the harbour's edge. The most daring building on Earth meets the Pacific.",
+    "quartiles": {
+      "0000-0600": { "label": "Harbour Silence", "image": "/assets/Sydney Opera House Australia/australia_dawn.jpg" },
+      "0600-1200": { "label": "Pacific First Light", "image": "/assets/Sydney Opera House Australia/australia_morning.jpg" },
+      "1200-1800": { "label": "Circular Quay Noon", "image": "/assets/Sydney Opera House Australia/asutalia_afternoon.jpg" },
+      "1800-0000": { "label": "Opera at Dusk", "image": "/assets/Sydney Opera House Australia/australia_night.jpg" }
+    }
+  },
+  {
+    "id": "taj-mahal-ind",
+    "name": "Taj Mahal",
+    "country": "India",
+    "coordinates": { "lat": 27.1751, "lng": 78.0421 },
+    "timezone": "Asia/Kolkata",
+    "narrative": "A monument to love carved in white marble. The Yamuna reflects eternity itself.",
+    "quartiles": {
+      "0000-0600": { "label": "Pre-dawn Marble", "image": "/assets/Taj Mahal India/india_dawn.jpg" },
+      "0600-1200": { "label": "Morning Mist on the Yamuna", "image": "/assets/Taj Mahal India/india_morning.jpg" },
+      "1200-1800": { "label": "Noon Reflection", "image": "/assets/Taj Mahal India/india_afternoon.png" },
+      "1800-0000": { "label": "Agra at Dusk", "image": "/assets/Taj Mahal India/india_night.jpg" }
+    }
+  },
+  {
+    "id": "great-wall-chn",
+    "name": "The Great Wall",
+    "country": "China",
+    "coordinates": { "lat": 40.4319, "lng": 116.5704 },
+    "timezone": "Asia/Shanghai",
+    "narrative": "Stone and earth stretching beyond the horizon, built by millions across centuries.",
+    "quartiles": {
+      "0000-0600": { "label": "Wall Before Light", "image": "/assets/The Great Wall China/china_dawn.png" },
+      "0600-1200": { "label": "Morning Watch", "image": "/assets/The Great Wall China/china_morning.jpg" },
+      "1200-1800": { "label": "Watchtower Noon", "image": "/assets/The Great Wall China/china_afternoon.jpg" },
+      "1800-0000": { "label": "The Dragon Sleeps", "image": "/assets/The Great Wall China/china_night.jpg" }
+    }
+  },
+  {
+    "id": "pyramids-egy",
+    "name": "The Pyramids",
+    "country": "Egypt",
+    "coordinates": { "lat": 29.9792, "lng": 31.1342 },
+    "timezone": "Africa/Cairo",
+    "narrative": "Three perfect triangles against the desert sky. The oldest wonder still holds its silence.",
+    "quartiles": {
+      "0000-0600": { "label": "Giza Before Dawn", "image": "/assets/The pyramids Egypt/egypt_dawn.jpg" },
+      "0600-1200": { "label": "Sahara Morning", "image": "/assets/The pyramids Egypt/egypt_morning.jpg" },
+      "1200-1800": { "label": "Desert Noon", "image": "/assets/The pyramids Egypt/egypt_afternoon.jpg" },
+      "1800-0000": { "label": "Sphinx at Dusk", "image": "/assets/The pyramids Egypt/egypt_night.jpg" }
     }
   }
 ]
