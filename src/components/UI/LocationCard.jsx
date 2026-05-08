@@ -67,7 +67,7 @@ export default function LocationCard({ location }) {
       {/* Image */}
       <div className="relative h-44 overflow-hidden">
         <img
-          src={trace.image}
+          src={`${import.meta.env.BASE_URL}${trace.image.replace(/^\//, '')}`}
           alt={location.name}
           className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
           onError={(e) => {

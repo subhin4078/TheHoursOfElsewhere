@@ -27,7 +27,7 @@ function TraceCell({ location, index }) {
       transition={{ duration: 0.3, delay: index * 0.05 }}
     >
       <img
-        src={quartile.image}
+        src={`${import.meta.env.BASE_URL}${quartile.image.replace(/^\//, '')}`}
         alt={location.name}
         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         onError={(e) => {
