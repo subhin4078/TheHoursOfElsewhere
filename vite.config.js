@@ -13,6 +13,7 @@ const MIME_TYPES = {
 };
 
 export default defineConfig({
+  base: "/The-Hours-Of-Elsewhere/",
   plugins: [
     react(),
     {
