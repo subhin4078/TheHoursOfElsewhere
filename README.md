@@ -80,13 +80,13 @@ Design notes are in [project.md](./project.md).
 
 ## Conventions
 
-This repo follows [CONVENTIONS.md](./CONVENTIONS.md).
+Branches use `feat/short-description`. Commits and pull request titles use [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## Contributing
 
 1. Create a branch: `feat/short-description`
 2. Commit with Conventional Commits
-3. Open a pull request using the body template in [CONVENTIONS.md](./CONVENTIONS.md#2-pull-requests)
+3. Open a pull request with a summary, a change list, and a test plan
 
 ## License
 
